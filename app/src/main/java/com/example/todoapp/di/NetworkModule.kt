@@ -7,6 +7,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
+import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
@@ -14,7 +15,7 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent ::class)
 object NetworkModule {
 
-    internal var BASE_URL = "https://jsonplaceholder.typicode.com/"
+    private var BASE_URL = "https://dummyjson.com/"
 
     @Provides
     @Singleton
@@ -24,6 +25,7 @@ object NetworkModule {
             .baseUrl(BASE_URL)
             .client(client)
             .addConverterFactory(GsonConverterFactory.create())
+            .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
             .build()
     }
 

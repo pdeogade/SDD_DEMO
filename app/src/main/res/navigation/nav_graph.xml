@@ -9,13 +9,23 @@
         android:name="com.example.todoapp.presentation.splash.SplashFragment">
         <action
             android:id="@+id/action_spalsh_to_home"
-            app:destination="@id/HomeFragment"
+            app:destination="@id/TaskListFragment"
             app:popUpTo="@id/SplashFragment"
-            app:popUpToInclusive="true"/>
+            app:popUpToInclusive="true" />
     </fragment>
 
     <fragment
-        android:id="@+id/HomeFragment"
+        android:id="@+id/TaskListFragment"
+        android:label="Task List"
         android:name="com.example.todoapp.presentation.tasks.TaskListFragment">
+        <action
+            android:id="@+id/action_taskList_to_taskDetail"
+            app:destination="@id/TaskDetailFragment" />
+    </fragment>
+
+    <fragment
+        android:label="Task Detail"
+        android:id="@+id/TaskDetailFragment"
+        android:name="com.example.todoapp.presentation.taskdetail.TaskDetailFragment">
     </fragment>
 </navigation>

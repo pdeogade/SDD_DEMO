@@ -11,30 +11,31 @@ class SplashViewModel : ViewModel() {
     private var timeMutableSharedFlow = MutableSharedFlow<Int>()
     val _timeSharedFlow = timeMutableSharedFlow.asSharedFlow()
 
-    private var time = MutableStateFlow<Int>(5)
-    val _time = time.asStateFlow()
-
     init {
-        collectflow()
+        collectFlow()
     }
 
     val countdownflow = flow {
-        val startValue = 5
+        val startValue = TIME_UNIT
         var currentValue = startValue
         while (currentValue > 0) {
-            delay(1000)
+            delay(DELAY_TIME_UNIT_IN_MS)
             currentValue--
             emit(currentValue)
         }
     }
 
 
-    private fun collectflow() {
+    private fun collectFlow() {
         viewModelScope.launch {
             countdownflow.collect {
                 timeMutableSharedFlow.emit(it)
-                time.emit(it)
             }
         }
+    }
+
+    companion object{
+        private const val TIME_UNIT = 1
+        private const val DELAY_TIME_UNIT_IN_MS = 1000L
     }
 }

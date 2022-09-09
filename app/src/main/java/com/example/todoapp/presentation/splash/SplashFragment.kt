@@ -42,10 +42,6 @@ class SplashFragment : Fragment() {
 
     private fun startTimerForSplash() {
 
-//        Timer().schedule(timerTask {
-//            findNavController().navigate(R.id.action_spalsh_to_home)
-//        }, 5000)
-
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel._timeSharedFlow.collect {

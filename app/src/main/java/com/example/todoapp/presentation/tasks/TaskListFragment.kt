@@ -4,30 +4,29 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.todoapp.databinding.HomeFragmentBinding
-import com.example.todoapp.presentation.splash.SplashFragment
+import com.example.todoapp.R
+import com.example.todoapp.databinding.TaskListFragmentBinding
 import com.example.todoapp.utils.Resource
-import com.example.todoapp.utils.getViewModelFactory
+import com.example.todoapp.utils.findNavControllerSafely
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class TaskListFragment : Fragment() {
 
-    private lateinit var binding: HomeFragmentBinding
-    private lateinit var adapter: TaskListDataBindingAdapter
-  //  private val viewModel: TaskListViewModel by viewModels()
-    private val viewModel: TaskListViewModel by viewModels{
-        getViewModelFactory()
-    }
+    private lateinit var binding: TaskListFragmentBinding
+    private lateinit var adapter: TaskListAdapter
+    private val viewModel: TaskListViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = HomeFragmentBinding.inflate(inflater, container, false)
+        binding = TaskListFragmentBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -39,9 +38,18 @@ class TaskListFragment : Fragment() {
     }
 
     private fun setUpRecylceView() {
-        adapter = TaskListDataBindingAdapter()
+        adapter = TaskListAdapter(viewModel)
         binding.todoList.layoutManager = LinearLayoutManager(requireContext())
         binding.todoList.adapter = adapter
+
+        viewModel.onDetailScreenClicked.observe(viewLifecycleOwner) {
+            it?.let{
+                viewModel.onTaskDetailNavigationComplete()
+                findNavController().navigate(
+                    R.id.action_taskList_to_taskDetail,
+                    Bundle().apply { putInt(TASK_ID, it) })
+            }
+        }
     }
 
     private fun setUpObservers() {
@@ -54,10 +62,12 @@ class TaskListFragment : Fragment() {
                         binding.progressBar.visibility = View.GONE
                         adapter.setItems(ArrayList(it.data))
                     }
+
                     Resource.Status.ERROR -> {
                         binding.progressBar.visibility = View.GONE
                         binding.error.visibility = View.VISIBLE
                     }
+
                     Resource.Status.LOADING -> {
                         binding.progressBar.visibility = View.VISIBLE
                         binding.error.visibility = View.GONE
@@ -70,6 +80,7 @@ class TaskListFragment : Fragment() {
     private fun setUpRetry() {
         binding.retry.setOnClickListener { viewModel.fetchGetTasks() }
     }
-
-
+    companion object{
+        const val TASK_ID = "taskId"
+    }
 }

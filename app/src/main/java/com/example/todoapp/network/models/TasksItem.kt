@@ -7,7 +7,7 @@ data class TasksItem(
     val completed: Boolean,
     @SerializedName("id")
     val id: Int,
-    @SerializedName("title")
+    @SerializedName("todo")
     val title: String,
     @SerializedName("userId")
     val userId: Int

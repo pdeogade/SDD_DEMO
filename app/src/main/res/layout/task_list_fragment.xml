@@ -45,7 +45,7 @@
             <androidx.appcompat.widget.AppCompatTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Please check your network connection"
+                android:text="@string/please_check_your_network_connection"
                 android:textColor="@color/white" />
 
             <androidx.appcompat.widget.AppCompatButton
@@ -53,7 +53,7 @@
                 android:background="#729C72"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="retry"
+                android:text="@string/retry"
                 android:textColor="@color/black" />
         </androidx.appcompat.widget.LinearLayoutCompat>
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,13 +1,15 @@
 package com.example.todoapp.presentation.tasks
 
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.example.todoapp.BR
+import com.example.todoapp.R
 import com.example.todoapp.databinding.ItemTaskBinding
 import com.example.todoapp.network.models.TasksItem
 
-class TaskListAdapter() : RecyclerView.Adapter<TaskViewHolder>() {
+class TaskListAdapter(private val viewModel: TaskListViewModel) : RecyclerView.Adapter<TaskViewDataBindingHolder>() {
 
     private val items = ArrayList<TasksItem>()
 
@@ -17,25 +19,26 @@ class TaskListAdapter() : RecyclerView.Adapter<TaskViewHolder>() {
         notifyDataSetChanged()
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskViewHolder {
-        val binding: ItemTaskBinding =
-            ItemTaskBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return TaskViewHolder(binding)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskViewDataBindingHolder {
+        val binding: ItemTaskBinding = DataBindingUtil.inflate(
+            LayoutInflater.from(parent.context),
+            R.layout.item_task, parent, false
+        )
+        return TaskViewDataBindingHolder(binding)
     }
 
     override fun getItemCount(): Int = items.size
 
-    override fun onBindViewHolder(holder: TaskViewHolder, position: Int) =
-        holder.bind(items[position])
+    override fun onBindViewHolder(holder: TaskViewDataBindingHolder, position: Int) {
+        holder.bind(items[position], viewModel)
+    }
+
 }
-
-class TaskViewHolder(private val itemBinding: ItemTaskBinding) :
+class TaskViewDataBindingHolder(private val itemBinding: ItemTaskBinding) :
     RecyclerView.ViewHolder(itemBinding.root) {
-
-    fun bind(item: TasksItem) {
-        itemBinding.taskTiltle.text = item.title
-        itemBinding.taskStatus.text = if (item.completed) "completed" else "inComplete"
-        itemBinding.taskStatus.setTextColor(if (item.completed) Color.GREEN else Color.RED)
+    fun bind(item: TasksItem, viewModel: TaskListViewModel) {
+        itemBinding.setVariable(BR.taskItem, item)
+        itemBinding.viewModel = viewModel
+        itemBinding.executePendingBindings()
     }
 }
-

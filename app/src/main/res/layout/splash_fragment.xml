@@ -10,10 +10,10 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TODO APP"
+        android:text="SDD APP"
         android:textColor="#729C72"
         android:textStyle="bold"
-        android:textSize="25sp"
+        android:textSize="@dimen/textSize_25"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
